@@ -22,7 +22,7 @@ func (oc OrkaConf) String() string {
 	return string(b)
 }
 
-func main() {
+func ReadConf() OrkaConf {
 	dir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatalln(err)
@@ -39,6 +39,11 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	return orkaConf
+}
+
+func main() {
+	orkaConf := ReadConf()
 
 	fmt.Println(orkaConf)
 }
