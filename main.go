@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	api "orka/concurrent-deploy/api"
 	conf "orka/concurrent-deploy/conf"
 )
 
@@ -26,4 +27,7 @@ func main() {
 	}
 
 	fmt.Println(string(b))
+
+	vmConfigName := api.GenerateVmConfigName()
+	fmt.Println(vmConfigName)
 }
