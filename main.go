@@ -17,4 +17,7 @@ func main() {
 
 	vmConfigName := api.GenerateVmConfigName()
 	fmt.Println(vmConfigName)
+
+	vmConfig := api.CreateVmConfig(orkaConf, vmConfigName)
+	fmt.Println(vmConfig)
 }

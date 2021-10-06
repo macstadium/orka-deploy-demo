@@ -3,6 +3,7 @@ package api
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"fmt"
 	"log"
 )
 
@@ -12,5 +13,5 @@ func GenerateVmConfigName() string {
 		log.Fatalln(err)
 	}
 
-	return hex.EncodeToString(b)
+	return fmt.Sprintf("sb-%s", hex.EncodeToString(b))
 }
