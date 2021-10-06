@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
 
 	api "orka/concurrent-deploy/api"
 	conf "orka/concurrent-deploy/conf"
@@ -15,18 +12,8 @@ func main() {
 
 	fmt.Println(orkaConf)
 
-	r, err := http.Get(orkaConf.URL + "/health-check")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer r.Body.Close()
-
-	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Println(string(b))
+	healthCheck := api.HealthCheck(orkaConf)
+	fmt.Println(healthCheck)
 
 	vmConfigName := api.GenerateVmConfigName()
 	fmt.Println(vmConfigName)
