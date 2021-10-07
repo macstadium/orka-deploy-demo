@@ -12,6 +12,9 @@ func main() {
 	vmConfigName := api.GenerateVmConfigName()
 	fmt.Println(vmConfigName)
 
-	vmConfig := cl.CreateVmConfig(vmConfigName)
-	fmt.Println(vmConfig)
+	res := cl.CreateVmConfig(vmConfigName)
+	fmt.Println(res)
+
+	res = cl.PurgeVm(vmConfigName)
+	fmt.Println(res)
 }
