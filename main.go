@@ -7,29 +7,35 @@ import (
 	api "orka/concurrent-deploy/api"
 )
 
-const N = 3
+const N = 12
 
 func main() {
-	c := make(chan string, N)
-	cl := api.NewOrkaApiClient()
+	var success, failure int
+	c := make(chan int, N)
 
+	cl := api.NewOrkaApiClient()
 	vmConfigName := api.GenerateVmConfigName()
-	fmt.Println(vmConfigName)
 
 	cl.CreateVmConfig(vmConfigName)
 
 	start := time.Now()
 	for i := 0; i < N; i++ {
 		go func() {
-			r := cl.DeployVm(vmConfigName)
+			r, _ := cl.DeployVm(vmConfigName)
 			c <- r
 		}()
 	}
 	for i := 0; i < N; i++ {
-		fmt.Println(<-c)
+		if <-c == 200 {
+			success++
+		} else {
+			failure++
+		}
 	}
 	duration := time.Since(start)
 	fmt.Printf("Total deploy time: %v\n", duration)
+	fmt.Printf("Total successful deployments: %v\n", success)
+	fmt.Printf("Total failed deployments: %v\n", failure)
 
 	cl.PurgeVm(vmConfigName)
 }

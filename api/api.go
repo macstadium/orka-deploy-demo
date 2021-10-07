@@ -63,7 +63,7 @@ func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string) {
   }
 }
 
-func (cl *OrkaApiClient) DeployVm(vmConfigName string) string {
+func (cl *OrkaApiClient) DeployVm(vmConfigName string) (int, string) {
   reqBody, _ := json.Marshal(map[string]string{"orka_vm_name":vmConfigName})
   res, err := cl.CallApi(http.MethodPost, "/resources/vm/deploy", reqBody)
   if err != nil {
@@ -76,7 +76,7 @@ func (cl *OrkaApiClient) DeployVm(vmConfigName string) string {
     log.Fatalln(err)
   }
 
-  return string(b)
+  return res.StatusCode, string(b)
 }
 
 func (cl *OrkaApiClient) PurgeVm(vmConfigName string) {
