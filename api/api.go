@@ -66,6 +66,22 @@ func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string) string {
 	return string(b)
 }
 
+func (cl *OrkaApiClient) DeployVm(vmConfigName string) string {
+  reqBody, _ := json.Marshal(map[string]string{"orka_vm_name":vmConfigName})
+  res, err := cl.CallApi(http.MethodPost, "/resources/vm/deploy", reqBody)
+  if err != nil {
+    log.Fatalln(err)
+  }
+  defer res.Body.Close()
+
+  b, err := ioutil.ReadAll(res.Body)
+  if err != nil {
+    log.Fatalln(err)
+  }
+
+  return string(b)
+}
+
 func (cl *OrkaApiClient) PurgeVm(vmConfigName string) string {
   reqBody, _ := json.Marshal(map[string]string{"orka_vm_name":vmConfigName})
   res, err := cl.CallApi(http.MethodDelete, "/resources/vm/purge", reqBody)

@@ -15,6 +15,9 @@ func main() {
 	res := cl.CreateVmConfig(vmConfigName)
 	fmt.Println(res)
 
+	res = cl.DeployVm(vmConfigName)
+	fmt.Println(res)
+
 	res = cl.PurgeVm(vmConfigName)
 	fmt.Println(res)
 }
