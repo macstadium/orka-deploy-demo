@@ -4,20 +4,14 @@ import (
 	"fmt"
 
 	api "orka/concurrent-deploy/api"
-	conf "orka/concurrent-deploy/conf"
 )
 
 func main() {
-	orkaConf := conf.ReadConf()
-
-	fmt.Println(orkaConf)
-
-	// healthCheck := api.HealthCheck(orkaConf)
-	// fmt.Println(healthCheck)
+	cl := api.NewOrkaApiClient()
 
 	vmConfigName := api.GenerateVmConfigName()
 	fmt.Println(vmConfigName)
 
-	vmConfig := api.CreateVmConfig(orkaConf, vmConfigName)
+	vmConfig := cl.CreateVmConfig(vmConfigName)
 	fmt.Println(vmConfig)
 }
