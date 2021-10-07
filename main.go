@@ -18,6 +18,7 @@ func main() {
 
 	cl.CreateVmConfig(vmConfigName)
 
+  fmt.Println("deploying ...")
 	start := time.Now()
 	for i := 0; i < N; i++ {
 		go func() {
