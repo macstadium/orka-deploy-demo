@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	conf "orka/concurrent-deploy/conf"
 )
@@ -18,7 +19,7 @@ type OrkaApiClient struct {
 
 func NewOrkaApiClient() *OrkaApiClient {
 	return &OrkaApiClient{
-		Client: &http.Client{},
+		Client: &http.Client{Timeout: time.Minute * 1},
 		Conf:   conf.ReadConf(),
 	}
 }
@@ -77,6 +78,27 @@ func (cl *OrkaApiClient) DeployVm(vmConfigName string) (int, string) {
 	}
 
 	return res.StatusCode, string(b)
+}
+
+func (cl *OrkaApiClient) DeleteVm(vmConfigName string) string {
+	reqBody, _ := json.Marshal(map[string]string{"orka_vm_name": vmConfigName})
+	res, err := cl.CallApi(http.MethodDelete, "/resources/vm/delete", reqBody)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		log.Fatalf("Unable to delete VM: %v\n", vmConfigName)
+	}
+
+	b, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return string(b)
 }
 
 func (cl *OrkaApiClient) PurgeVm(vmConfigName string) {

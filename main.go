@@ -7,7 +7,7 @@ import (
 	api "orka/concurrent-deploy/api"
 )
 
-const N = 12
+const N = 40
 
 func main() {
 	var success, failure int
@@ -37,6 +37,9 @@ func main() {
 	fmt.Printf("Total deploy time: %v\n", duration)
 	fmt.Printf("Total successful deployments: %v\n", success)
 	fmt.Printf("Total failed deployments: %v\n", failure)
+
+	res := cl.DeleteVm(vmConfigName)
+	fmt.Println(res)
 
 	cl.PurgeVm(vmConfigName)
 }
