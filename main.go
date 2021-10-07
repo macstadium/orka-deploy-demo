@@ -12,8 +12,8 @@ func main() {
 
 	fmt.Println(orkaConf)
 
-	healthCheck := api.HealthCheck(orkaConf)
-	fmt.Println(healthCheck)
+	// healthCheck := api.HealthCheck(orkaConf)
+	// fmt.Println(healthCheck)
 
 	vmConfigName := api.GenerateVmConfigName()
 	fmt.Println(vmConfigName)
