@@ -16,8 +16,7 @@ func main() {
 	vmConfigName := api.GenerateVmConfigName()
 	fmt.Println(vmConfigName)
 
-	res := cl.CreateVmConfig(vmConfigName)
-	fmt.Println(res)
+	cl.CreateVmConfig(vmConfigName)
 
 	start := time.Now()
 	for i := 0; i < N; i++ {
@@ -32,6 +31,5 @@ func main() {
 	duration := time.Since(start)
 	fmt.Printf("Total deploy time: %v\n", duration)
 
-	res = cl.PurgeVm(vmConfigName)
-	fmt.Println(res)
+	cl.PurgeVm(vmConfigName)
 }

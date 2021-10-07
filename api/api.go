@@ -50,7 +50,7 @@ func (cl *OrkaApiClient) CallApi(method string, route string, b []byte) (*http.R
   return cl.Client.Do(req)
 }
 
-func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string) string {
+func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string) {
 	reqBody, _ := json.Marshal(map[string]interface{}{"orka_vm_name": vmConfigName, "orka_base_image": "90GBigSurSSH.img", "orka_cpu_core": 3})
   res, err := cl.CallApi(http.MethodPost, "/resources/vm/create", reqBody)
 	if err != nil {
@@ -58,12 +58,9 @@ func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string) string {
 	}
 	defer res.Body.Close()
 
-	b, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return string(b)
+  if res.StatusCode != http.StatusCreated {
+    log.Fatalln("Unable to create VM config!")
+  }
 }
 
 func (cl *OrkaApiClient) DeployVm(vmConfigName string) string {
@@ -82,7 +79,7 @@ func (cl *OrkaApiClient) DeployVm(vmConfigName string) string {
   return string(b)
 }
 
-func (cl *OrkaApiClient) PurgeVm(vmConfigName string) string {
+func (cl *OrkaApiClient) PurgeVm(vmConfigName string) {
   reqBody, _ := json.Marshal(map[string]string{"orka_vm_name":vmConfigName})
   res, err := cl.CallApi(http.MethodDelete, "/resources/vm/purge", reqBody)
 	if err != nil {
@@ -90,10 +87,7 @@ func (cl *OrkaApiClient) PurgeVm(vmConfigName string) string {
 	}
 	defer res.Body.Close()
 
-	b, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return string(b)
+  if res.StatusCode != http.StatusOK {
+    log.Fatalf("Unable to purge VM config: %v\n", vmConfigName)
+  }
 }
