@@ -36,8 +36,8 @@ func (cl *OrkaApiClient) CallApi(method string, route string, b []byte) (*http.R
 	return cl.Client.Do(req)
 }
 
-func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string) {
-	reqBody, _ := json.Marshal(map[string]interface{}{"orka_vm_name": vmConfigName, "orka_base_image": "90GBigSurSSH.img", "orka_cpu_core": 3})
+func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string, baseImage string, cpuCount int) {
+	reqBody, _ := json.Marshal(map[string]interface{}{"orka_vm_name": vmConfigName, "orka_base_image": baseImage, "orka_cpu_core": cpuCount})
 	res, err := cl.CallApi(http.MethodPost, "/resources/vm/create", reqBody)
 	if err != nil {
 		log.Fatalln(err)
