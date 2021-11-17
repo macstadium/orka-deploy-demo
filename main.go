@@ -1,18 +1,18 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"time"
-  "flag"
 
-	api "orka/concurrent-deploy/api"
+	api "orka/deploy-demo/api"
 )
 
 func main() {
-  numDeploys := flag.Int("deploy", 4, "number of virtual machines to deploy")
-  baseImage := flag.String("base-image", "90GBigSurSSH.img", "base image to use for virtual machine configuration")
-  cpuCount := flag.Int("cpu-count", 3, "cpu core count to use for virtual machine configuration")
-  flag.Parse()
+	numDeploys := flag.Int("deploy", 4, "number of virtual machines to deploy")
+	baseImage := flag.String("base-image", "90GBigSurSSH.img", "base image to use for virtual machine configuration")
+	cpuCount := flag.Int("cpu-count", 3, "cpu core count to use for virtual machine configuration")
+	flag.Parse()
 
 	var success, failure int
 	c := make(chan int, *numDeploys)

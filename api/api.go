@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	conf "orka/concurrent-deploy/conf"
+	conf "orka/deploy-demo/conf"
 )
 
 type OrkaApiClient struct {
