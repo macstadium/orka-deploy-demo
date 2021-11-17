@@ -36,7 +36,7 @@ func (cl *OrkaApiClient) CallApi(method string, route string, b []byte) (*http.R
 	return cl.Client.Do(req)
 }
 
-func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string, baseImage string, cpuCount int) {
+func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string, baseImage string, cpuCount int) string {
 	reqBody, _ := json.Marshal(map[string]interface{}{"orka_vm_name": vmConfigName, "orka_base_image": baseImage, "orka_cpu_core": cpuCount})
 	res, err := cl.CallApi(http.MethodPost, "/resources/vm/create", reqBody)
 	if err != nil {
@@ -44,9 +44,16 @@ func (cl *OrkaApiClient) CreateVmConfig(vmConfigName string, baseImage string, c
 	}
 	defer res.Body.Close()
 
-	if res.StatusCode != http.StatusCreated {
-		log.Fatalln("Unable to create VM config!")
+	b, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalln(err)
 	}
+
+	if res.StatusCode != http.StatusCreated {
+		log.Fatalln("Unable to create VM config!", string(b))
+	}
+
+	return string(b)
 }
 
 func (cl *OrkaApiClient) DeployVm(vmConfigName string) (int, string) {
@@ -65,25 +72,17 @@ func (cl *OrkaApiClient) DeployVm(vmConfigName string) (int, string) {
 	return res.StatusCode, string(b)
 }
 
-func (cl *OrkaApiClient) DeleteVm(vmConfigName string) string {
+func (cl *OrkaApiClient) DeleteVm(vmConfigName string) {
 	reqBody, _ := json.Marshal(map[string]string{"orka_vm_name": vmConfigName})
 	res, err := cl.CallApi(http.MethodDelete, "/resources/vm/delete", reqBody)
 	if err != nil {
-		log.Println(err)
-		return ""
+		log.Fatalln(err)
 	}
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
 		log.Fatalf("Unable to delete VM: %v\n", vmConfigName)
 	}
-
-	b, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return string(b)
 }
 
 func (cl *OrkaApiClient) PurgeVm(vmConfigName string) {
