@@ -24,21 +24,6 @@ func NewOrkaApiClient() *OrkaApiClient {
 	}
 }
 
-func HealthCheck(oc conf.OrkaConf) string {
-	r, err := http.Get(oc.URL + "/health-check")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer r.Body.Close()
-
-	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	return string(b)
-}
-
 func (cl *OrkaApiClient) CallApi(method string, route string, b []byte) (*http.Response, error) {
 	req, err := http.NewRequest(method, cl.Conf.URL+route, bytes.NewBuffer(b))
 	if err != nil {
